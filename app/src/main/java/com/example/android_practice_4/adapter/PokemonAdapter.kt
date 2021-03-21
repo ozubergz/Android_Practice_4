@@ -3,6 +3,7 @@ package com.example.android_practice_4.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.android_practice_4.databinding.PokemonItemBinding
 import com.example.android_practice_4.model.Pokemon
 
@@ -14,6 +15,13 @@ class PokemonAdapter(private val dataSet: List<Pokemon>) : RecyclerView.Adapter<
             fun bind(position: Int) {
                 val pokemon = dataSet[position]
                 binding.pokemonName.text = pokemon.name
+
+                val matchResult = """\/\d+""".toRegex().find(pokemon.url)
+                val value = matchResult?.value
+                val id = value?.drop(1)
+
+                val sprite = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
+                Glide.with(this.itemView).load(sprite).into(binding.pokemonImage)
             }
     }
 
