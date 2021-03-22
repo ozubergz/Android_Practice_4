@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Android_Practice_4</string>
+    <string name="abilities">abilities:</string>
+    <string name="stats">stats:</string>
+    <string name="next">next</string>
+    <string name="previous">previous</string>
 </resources>

@@ -6,17 +6,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android_practice_4.databinding.PokemonItemBinding
 import com.example.android_practice_4.model.Pokemon
+import com.example.android_practice_4.view.ClickListener
 
-class PokemonAdapter(private val dataSet: List<Pokemon>) : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
+class PokemonAdapter(private val dataSet: List<Pokemon>, private val listener: ClickListener) : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
 
     class PokemonViewHolder(
         private val binding: PokemonItemBinding,
+        private val listener: ClickListener,
         private val dataSet: List<Pokemon>) : RecyclerView.ViewHolder(binding.root) {
             fun bind(position: Int) {
                 val pokemon = dataSet[position]
                 binding.pokemonName.text = pokemon.name
 
-                val matchResult = """\/\d+""".toRegex().find(pokemon.url)
+                binding.root.setOnClickListener {
+                    listener.itemClick(pokemon.name)
+                }
+
+                val matchResult = """/\d+""".toRegex().find(pokemon.url)
                 val value = matchResult?.value
                 val id = value?.drop(1)
 
@@ -27,7 +33,7 @@ class PokemonAdapter(private val dataSet: List<Pokemon>) : RecyclerView.Adapter<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val view = PokemonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PokemonViewHolder(view, dataSet)
+        return PokemonViewHolder(view, listener, dataSet)
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
