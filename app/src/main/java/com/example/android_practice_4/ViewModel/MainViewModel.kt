@@ -5,9 +5,12 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android_practice_4.model.PokemonDetail
 import com.example.android_practice_4.model.Result
 import com.example.android_practice_4.repo.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,48 +27,24 @@ class MainViewModel : ViewModel() {
         get() = _pokemon
 
     fun getNextPokemons(offset: String, limit: String) {
-        val call = Repository.getNextPokemons(offset, limit)
-        call.enqueue(object : Callback<Result> {
-            override fun onResponse(call: Call<Result>, response: Response<Result>) {
-                _result.postValue(response.body())
-            }
-
-            override fun onFailure(call: Call<Result>, t: Throwable) {
-                Log.d("MainViewModel", "onFailure: ${t.message}")
-            }
-
-        })
+        viewModelScope.launch(Dispatchers.IO) {
+            val res = Repository.getNextPokemons(offset, limit)
+            _result.postValue(res.body())
+        }
     }
 
     fun getSinglePokemon(name: String) {
-        val call = Repository.getSinglePokemon(name)
-        call.enqueue(object : Callback<PokemonDetail> {
-            override fun onResponse(call: Call<PokemonDetail>, response: Response<PokemonDetail>) {
-                _pokemon.postValue(response.body())
-            }
-
-            override fun onFailure(call: Call<PokemonDetail>, t: Throwable) {
-                Log.d("MainViewModel", "onFailure: ${t.message}")
-            }
-
-        })
+        viewModelScope.launch {
+            val res = Repository.getSinglePokemon(name)
+            _pokemon.postValue(res.body())
+        }
     }
 
-
     fun getPokemons() {
-        val call = Repository.getPokemons()
-        call.enqueue(object : Callback<Result> {
-            override fun onResponse(call: Call<Result>, response: Response<Result>) {
-                if (response.isSuccessful) {
-                    _result.postValue(response.body())
-                }
-            }
-
-            override fun onFailure(call: Call<Result>, t: Throwable) {
-                Log.d("MainViewModel", "onFailure: ${t.message}")
-            }
-
-        })
+        viewModelScope.launch(Dispatchers.IO) {
+            val res = Repository.getPokemons()
+            _result.postValue(res.body())
+        }
     }
 
 }
