@@ -1,31 +1,40 @@
 package com.example.android_practice_4.view
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.android_practice_4.ViewModel.MainViewModel
 import com.example.android_practice_4.adapter.AbilityAdapter
 import com.example.android_practice_4.adapter.StatAdapter
-import com.example.android_practice_4.databinding.PokemonDetailBinding
-import com.example.android_practice_4.databinding.PokemonItemBinding
+import com.example.android_practice_4.databinding.FragmentDetailBinding
 
-class PokemonDetail : AppCompatActivity() {
 
-    private lateinit var binding: PokemonDetailBinding
+class DetailFragment : Fragment() {
+
+    private lateinit var binding: FragmentDetailBinding
+    private val args: DetailFragmentArgs by navArgs()
     private val viewModel by viewModels<MainViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = PokemonDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = FragmentDetailBinding.inflate(inflater, container, false).also {
+        binding = it
+    }.root
 
-        val name = intent.getStringExtra("Pokemon Name")
-        viewModel.getSinglePokemon(name!!)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel.pokemon.observe(this, {
+        val name = args.name
+
+        viewModel.getSinglePokemon(name)
+
+        viewModel.pokemon.observe(viewLifecycleOwner, {
             val sprite = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${it.id}.png"
             Glide.with(this).load(sprite).into(binding.ivSprite)
 
@@ -43,6 +52,6 @@ class PokemonDetail : AppCompatActivity() {
             binding.lvStats.adapter = StatAdapter(it.stats)
 
         })
-    }
 
+    }
 }

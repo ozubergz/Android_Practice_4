@@ -12,13 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Android_Practice_4">
+<!--        <activity-->
+<!--            android:name=".view.PokemonDetail"-->
+<!--            android:theme="@style/Theme.AppCompat.NoActionBar"/>-->
         <activity
-            android:name=".view.PokemonDetail"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity
-            android:name=".view.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            >
+            android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
