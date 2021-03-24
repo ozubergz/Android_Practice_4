@@ -1,21 +1,20 @@
 package com.example.android_practice_4.ViewModel
 
+import android.app.Application
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.android_practice_4.model.PokemonDetail
 import com.example.android_practice_4.model.Result
 import com.example.android_practice_4.repo.Repository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _result = MutableLiveData<Result>()
     private val _pokemon = MutableLiveData<PokemonDetail>()
@@ -42,8 +41,8 @@ class MainViewModel : ViewModel() {
 
     fun getPokemons() {
         viewModelScope.launch(Dispatchers.IO) {
-            val res = Repository.getPokemons()
-            _result.postValue(res.body())
+            val result = Repository.getPokemons(getApplication())
+            _result.postValue(result)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.android_practice_4.view
+ package com.example.android_practice_4.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -11,10 +11,4 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
-
-//    override fun itemClick(name: String) {
-//        val action = Intent(this, PokemonDetail::class.java)
-//        action.putExtra("Pokemon Name", name)
-//        startActivity(action)
-//    }
 }

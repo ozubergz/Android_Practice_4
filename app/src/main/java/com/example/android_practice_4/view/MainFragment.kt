@@ -31,7 +31,6 @@ class MainFragment : Fragment(), ClickListener {
         binding = it
     }.root
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
