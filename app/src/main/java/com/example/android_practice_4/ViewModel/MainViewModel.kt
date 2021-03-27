@@ -7,14 +7,19 @@ import androidx.lifecycle.*
 import com.example.android_practice_4.model.PokemonDetail
 import com.example.android_practice_4.model.Result
 import com.example.android_practice_4.repo.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: Repository
+) : ViewModel() {
 
     private val _result = MutableLiveData<Result>()
     private val _pokemon = MutableLiveData<PokemonDetail>()
@@ -27,22 +32,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getNextPokemons(offset: String, limit: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val res = Repository.getNextPokemons(offset, limit)
+            val res = repository.getNextPokemons(offset, limit)
             _result.postValue(res.body())
         }
     }
 
     fun getSinglePokemon(name: String) {
         viewModelScope.launch {
-            val res = Repository.getSinglePokemon(name)
+            val res = repository.getSinglePokemon(name)
             _pokemon.postValue(res.body())
         }
     }
 
     fun getPokemons() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = Repository.getPokemons(getApplication())
-            _result.postValue(result)
+            val result = repository.getPokemons()
+            _result.postValue(result.body())
         }
     }
 

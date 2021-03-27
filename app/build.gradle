@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id "androidx.navigation.safeargs.kotlin"
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -42,6 +43,10 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def nav_version = "2.3.4"
     def room_version = "2.2.6"
+
+    // HILT
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     // ROOM
     implementation "androidx.room:room-runtime:2.2.6"

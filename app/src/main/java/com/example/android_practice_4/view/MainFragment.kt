@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android_practice_4.ViewModel.MainViewModel
 import com.example.android_practice_4.adapter.PokemonAdapter
 import com.example.android_practice_4.databinding.FragmentMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
 interface ClickListener {
     fun itemClick(name: String)
 }
 
+@AndroidEntryPoint
 class MainFragment : Fragment(), ClickListener {
 
     private lateinit var nextUrl: String

@@ -12,8 +12,9 @@ import com.example.android_practice_4.ViewModel.MainViewModel
 import com.example.android_practice_4.adapter.AbilityAdapter
 import com.example.android_practice_4.adapter.StatAdapter
 import com.example.android_practice_4.databinding.FragmentDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+ @AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
