@@ -1,9 +1,12 @@
 package com.example.android_practice_4.di
 
+import android.content.Context
+import com.example.android_practice_4.data.PokemonDB
 import com.example.android_practice_4.repo.PokemonService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,5 +40,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideService(retrofit: Retrofit): PokemonService = retrofit.create(PokemonService::class.java)
+
+    @Provides
+    @Singleton
+    fun providePokemonDB(@ApplicationContext context: Context) = PokemonDB.getDataBase(context)
 
 }

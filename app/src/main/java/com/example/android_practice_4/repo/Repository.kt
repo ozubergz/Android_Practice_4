@@ -1,27 +1,28 @@
 package com.example.android_practice_4.repo
 
-import android.content.Context
 import com.example.android_practice_4.data.PokemonDB
-import com.example.android_practice_4.model.Pokemon
 import com.example.android_practice_4.model.PokemonDetail
 import com.example.android_practice_4.model.Result
-import kotlinx.coroutines.flow.Flow
-import retrofit2.Call
 import retrofit2.Response
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-    private val provideService: PokemonService
+    private val provideService: PokemonService,
+    private val providePokemonDB: PokemonDB
 ) {
 
 //    companion object {
 //        private const val TIME_STAMP_KEY = "TIME_STAMP_KEY"
 //    }
 
-    suspend fun getPokemons() : Response<Result> {
-        return provideService.getPokemons()
+    suspend fun getPokemons() : Result {
+        val result = provideService.getPokemons()
+        if(result.isSuccessful) {
+            result.body()?.let { providePokemonDB.pokemonDao().insertAll(it) }
+        }
 
-//        val pokemonDao = PokemonDB.getDataBase(context).pokemonDao()
+        return providePokemonDB.pokemonDao().getAll()
+
 //        val sharedPref = context.getSharedPreferences("", Context.MODE_PRIVATE)
 //        var savedTime = sharedPref.getLong(TIME_STAMP_KEY, 0)
 //

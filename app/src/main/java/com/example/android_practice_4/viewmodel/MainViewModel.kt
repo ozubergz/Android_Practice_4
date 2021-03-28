@@ -1,19 +1,15 @@
-package com.example.android_practice_4.ViewModel
+package com.example.android_practice_4.viewmodel
 
-import android.app.Application
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android_practice_4.model.PokemonDetail
 import com.example.android_practice_4.model.Result
 import com.example.android_practice_4.repo.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,7 +43,7 @@ class MainViewModel @Inject constructor(
     fun getPokemons() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getPokemons()
-            _result.postValue(result.body())
+            _result.postValue(result)
         }
     }
 

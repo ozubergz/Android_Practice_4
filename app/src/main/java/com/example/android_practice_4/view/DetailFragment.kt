@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.android_practice_4.ViewModel.MainViewModel
+import com.example.android_practice_4.viewmodel.MainViewModel
 import com.example.android_practice_4.adapter.AbilityAdapter
 import com.example.android_practice_4.adapter.StatAdapter
 import com.example.android_practice_4.databinding.FragmentDetailBinding
