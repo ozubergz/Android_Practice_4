@@ -11,7 +11,7 @@ import retrofit2.http.Query
 interface PokemonService {
 
     @GET("pokemon")
-    suspend fun getPokemons() : Response<Result>
+    suspend fun getPokemons() : Result
 
     @GET("pokemon")
     suspend fun getNextPokemons(

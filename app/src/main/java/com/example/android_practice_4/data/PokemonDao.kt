@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 interface PokemonDao {
 
     @Query("SELECT * FROM result")
-    fun getAll() : Result
+    fun getAll() : Flow<Result>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(result : Result)
+    suspend fun insertAll(result: Result)
 }

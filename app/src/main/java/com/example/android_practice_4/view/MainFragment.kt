@@ -36,8 +36,40 @@ class MainFragment : Fragment(), ClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getPokemons()
-        observers()
+        viewModel.getPokemons.observe(viewLifecycleOwner, {
+            val data = it.data
+
+            binding.apply {
+
+                if (data != null) {
+
+                    rvPokemons.apply {
+                        adapter = PokemonAdapter(data.results, this@MainFragment)
+                        layoutManager = GridLayoutManager(context, 4)
+                    }
+
+                    nextUrl = data.next.toString()
+                    prevUrl = data.previous.toString()
+
+                    if(data.previous == null) {
+                        binding.btnPrev.visibility = View.GONE
+                    } else {
+                        binding.btnPrev.visibility = View.VISIBLE
+                    }
+
+                    if(data.next == null) {
+                        binding.btnNext.visibility = View.GONE
+                    } else {
+                        binding.btnNext.visibility = View.VISIBLE
+                    }
+                }
+
+            }
+
+
+        })
+
+//        observers()
         listeners()
     }
 

@@ -1,14 +1,12 @@
 package com.example.android_practice_4.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.android_practice_4.model.PokemonDetail
 import com.example.android_practice_4.model.Result
 import com.example.android_practice_4.repo.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +24,8 @@ class MainViewModel @Inject constructor(
     val pokemon : LiveData<PokemonDetail>
         get() = _pokemon
 
+    val getPokemons = repository.getPokemons().asLiveData()
+
     fun getNextPokemons(offset: String, limit: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val res = repository.getNextPokemons(offset, limit)
@@ -37,13 +37,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val res = repository.getSinglePokemon(name)
             _pokemon.postValue(res.body())
-        }
-    }
-
-    fun getPokemons() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.getPokemons()
-            _result.postValue(result)
         }
     }
 
