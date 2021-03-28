@@ -18,9 +18,7 @@ class Repository @Inject constructor(
     fun getPokemons() = networkBoundResource(
             query =  { pokemonDao.getAll() },
             fetch = { provideService.getPokemons() },
-            saveFetchResult = { result ->
-                pokemonDao.insertAll(result)
-            }
+            saveFetchResult = { pokemonDao.insertAll(it) }
     )
 
     suspend fun getNextPokemons(offset: String, limit: String) : Response<Result> {
