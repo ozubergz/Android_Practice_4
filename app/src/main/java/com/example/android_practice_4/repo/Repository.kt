@@ -29,5 +29,4 @@ class Repository @Inject constructor(
         return provideService.getSinglePokemon(name)
     }
 
-
 }

@@ -1,11 +1,11 @@
 package com.example.android_practice_4.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -25,8 +25,6 @@ interface ClickListener {
 @AndroidEntryPoint
 class MainFragment : Fragment(), ClickListener {
 
-    private lateinit var nextUrl: String
-    private lateinit var prevUrl: String
     private lateinit var binding: FragmentMainBinding
     private val viewModel by viewModels<MainViewModel>()
 
@@ -44,8 +42,6 @@ class MainFragment : Fragment(), ClickListener {
             viewModel.getPokemons.observe(viewLifecycleOwner, { result ->
                 if (result.data != null) {
                     val data = result.data
-                    nextUrl = data.next.toString()
-                    prevUrl = data.previous.toString()
 
                     rvPokemons.apply {
                         adapter = PokemonAdapter(data.results, this@MainFragment)
@@ -55,51 +51,40 @@ class MainFragment : Fragment(), ClickListener {
                     btnPrev.isVisible = data.previous != null
                     btnNext.isVisible = data.next != null
 
-                    progressBar.isVisible =
-                        result is Resource.Loading && data.results.isNullOrEmpty()
+                    listeners(btnNext, data.next.toString())
+                    listeners(btnPrev, data.previous.toString())
+
+                    progressBar.isVisible = result is Resource.Loading && data.results.isNullOrEmpty()
                     tvError.isVisible = result is Resource.Error && data.results.isNullOrEmpty()
                     tvError.text = result.error?.localizedMessage
                 }
             })
         }
 
-//        observers()
-        listeners()
+        observers()
     }
 
-//    private fun observers() {
-//        viewModel.result.observe(viewLifecycleOwner, Observer {
-//            binding.rvPokemons.apply {
-//                adapter = PokemonAdapter(it.results, this@MainFragment)
-//                layoutManager = GridLayoutManager(context, 4)
-//            }
-//
-//            nextUrl = it.next.toString()
-//            prevUrl = it.previous.toString()
-//
-//            if(it.previous == null) {
-//                binding.btnPrev.visibility = View.GONE
-//            } else {
-//                binding.btnPrev.visibility = View.VISIBLE
-//            }
-//
-//            if(it.next == null) {
-//                binding.btnNext.visibility = View.GONE
-//            } else {
-//                binding.btnNext.visibility = View.VISIBLE
-//            }
-//        })
-//    }
+    private fun observers() {
+        binding.apply {
 
-    private fun listeners() {
-        binding.btnNext.setOnClickListener {
-            val offset = findRegex(nextUrl)
-            viewModel.getNextPokemons(offset, "20")
+            viewModel.result.observe(viewLifecycleOwner, Observer {
+                rvPokemons.apply {
+                    adapter = PokemonAdapter(it.results, this@MainFragment)
+                    layoutManager = GridLayoutManager(context, 4)
+                }
+
+                btnPrev.isVisible = it.previous != null
+                btnNext.isVisible = it.next != null
+
+                listeners(btnNext, it.next.toString())
+                listeners(btnPrev, it.previous.toString())
+            })
         }
+    }
 
-        binding.btnPrev.setOnClickListener {
-            val offset = findRegex(prevUrl)
-            viewModel.getNextPokemons(offset, "20")
+    private fun listeners(btn: Button, url: String) {
+        btn.setOnClickListener {
+            viewModel.getNextPokemons(findRegex(url), "20")
         }
     }
 

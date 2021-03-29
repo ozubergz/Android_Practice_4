@@ -24,7 +24,7 @@ class MainViewModel @Inject constructor(
     val pokemon : LiveData<PokemonDetail>
         get() = _pokemon
 
-    val getPokemons = repository.getPokemons().asLiveData()
+    var getPokemons = repository.getPokemons().asLiveData(viewModelScope.coroutineContext)
 
     fun getNextPokemons(offset: String, limit: String) {
         viewModelScope.launch(Dispatchers.IO) {
